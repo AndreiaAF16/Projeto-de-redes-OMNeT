@@ -3,7 +3,7 @@
 
 using namespace omnetpp;
 
-class Node: public cSimpleModule{
+class Node: public cSimpleModule {
 protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
