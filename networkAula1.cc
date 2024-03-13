@@ -13,6 +13,7 @@ Define_Module(Node);
 
 void Node::initialize(){
     if(strcmp("NodeA", getName()) == 0){
+        std::cout << "Olá mundo!" << endl;
    	 cMessage *msg = new cMessage("MSG TIC TOC!");
    	 send(msg, "out");
     }
