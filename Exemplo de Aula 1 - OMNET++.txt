@@ -1,0 +1,215 @@
+﻿Exemplo de Aula 1 - OMNET++
+
+
+===Arquivo .ned================================================
+
+
+simple Node
+{
+    gates:
+            input in;
+            output out;
+}
+network networkAula1
+{
+    @display("bgb=409,301");
+    submodules:
+            NodeB: Node {
+                    @display("p=64,183");
+            }
+            NodeA: Node {
+                    @display("p=227,129");
+            }
+    connections:
+            NodeA.out --> NodeB.in;
+            NodeB.out --> NodeA.in;
+
+
+===Arquivo .cc================================================
+
+
+#include <omnetpp.h>
+#include <string.h>
+
+
+using namespace omnetpp;
+
+
+class Node: public cSimpleModule{
+protected:
+    virtual void initialize() override;
+    virtual void handleMessage(Message *msg) override;
+};
+
+
+Define_Module(Node);
+
+
+void Node::initialize(){
+    if(strcmp("NodeA", getName()) == 0){
+            cMessage *msg = new cMessage("MSG TIC TOC!");
+            send(msg, "out");
+    }
+}
+
+
+void Node::handleMessage(cMesssage *msg){
+    send(msg, "out");
+}
+
+
+===Arquivo .ini================================================
+
+
+[General]
+network = networkAula1
+record-eventlog = true
+
+
+
+
+Atividade OMNET
+
+
+
+
+===Arquivo .ned===================================
+
+
+
+
+
+
+simple Txc15
+{
+        parameters:
+                @display("i=block/routing");
+                int source = default(-1);
+                int destination = default(-1);
+        gates:
+                inout gate[];
+}
+
+
+
+
+===Arquivo .cc===================================
+
+
+
+
+void Txc15::initialize(){
+        //Initialize variables
+        receivedMsg = false;
+        numSent = 0;
+        nGates = gateSize("gate");
+        WATCH(numSent);
+        WATCH(numReceived);
+
+
+        hopCountStats.setName("hopCountStats");
+        hopCountVector.setName("HopCount");
+
+
+        int source;
+        int destination;
+
+
+        source = par("source");
+        destination = par("destination");
+
+
+===Arquivo .ini===================================
+
+
+
+
+[Config TictocWell]
+network = Tictoc15
+record-eventlog = true
+
+
+Tictoc15.tic[*].source = 0
+Tictoc15.tic[*].destination = 5
+
+
+
+
+Exemplo de Aula 2 - SUMO
+
+
+Criar pasta no computador do SUMO, entrar nela no CMD, e criar os arquivos de edge, node e routes em XML, e criar no CMD com a função Netconvert  o arquivo executável do sumo net.xml
+
+
+===Arquivo .nod.xml=======================
+
+
+<nodes>
+        <node id="1" x="-250.0" y="0.0"/>
+        <node id="2" x="+250.0" y="0.0"/>
+        <node id="3" x="+251.0" y="0.0"/>
+<nodes>
+
+
+===Arquivo .edg.xml=======================
+
+
+<edges>
+        <edge from="1" id="1to2" to="2"/>
+        <edge from="2" id="out" to="3"/>
+<edges>
+
+
+===Código para rodar a simulação==========================
+
+
+nano hello.nod.xml
+nano hello.edg.xml
+netconvert--node-files=hello.nod.xml--edge-files=hello.edg.xml--output-file=hello.net.xml
+
+
+===Código para verificar a simulação=============================
+
+
+sumo-gui -n hello.net.xml
+
+
+===Arquivo .rout.xml=======================
+
+
+<routes>
+        <vType accel="1.0" decel="5.0" id="Car" length="2.0" max speed="13.8"/>
+        <route id="route0" edges="1to2 out"/>
+        <vehicle depart="1" id="veh0" route="route0" type="Car"/>
+        <vehicle depart="1" id="veh0" route="route0" type="Car"/>
+<routes>
+
+
+===Código para verificar a simulação atualizada=============================
+
+
+sumo-gui -n hello.net.xml -r hello.rou.xml
+
+
+Agora colocamos tudo em um arquivo de configuração e salvamos como: hello.sumocfg
+
+
+nano hello.sumocfg
+
+
+<configuration>
+        <input>
+                <net-file value="hello.net.xml"/>
+                <route-files value="hello.rou.xml"/>
+        </input>
+        <time>
+                <begin value="0"/>
+                <end value="10000"/>
+        </time>
+<configuration>
+
+
+sumo-gui -c hello.sumocfg
+
+
+sumo-gui -c hello.sumocfg –full output metricas.xml
