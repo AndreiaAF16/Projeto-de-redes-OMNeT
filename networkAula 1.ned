@@ -18,3 +18,5 @@ network networkAula1
             NodeA.out --> NodeB.in;
             NodeB.out --> NodeA.in;
 }
+
+
