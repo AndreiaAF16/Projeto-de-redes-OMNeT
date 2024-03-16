@@ -1,6 +1,6 @@
 # Projeto-de-redes-OMNeT
 
-Nos arquivos networkAula1, Node.cc e omnetpp.ini está estamos modelando uma rede simples com dois nós, chamados NodeA e NodeB. Cada nó tem uma entrada (in) e uma saída (out).
+Nos arquivos networkAula1.ned, Node.cc e omnetpp.ini está estamos modelando uma rede simples com dois nós, chamados NodeA e NodeB. Cada nó tem uma entrada (in) e uma saída (out).
 
 Na função initialize() da classe Node, estamos inicializando os nós. Se o nome do nó for "NodeA", criamos uma mensagem chamada "MSG TIC TOC!" e a enviamos pela saída (out) do nó. Ou seja, o NodeA envia uma mensagem inicial para começar a comunicação.
 
